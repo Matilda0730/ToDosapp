@@ -54,6 +54,32 @@ function createToDoElement(item) {
   removeBtnEl.classList.add('material-icons', 'remove-btn')
   removeBtnEl.innerText = 'remove_circles'
 
+  inputEl.addEventListener('input', () => {
+    item.text = inputEl.value
+  }) //함수에서 하는 일: item(객체).text에 타이핑한 이것을 넣어주는 것.
+
+  checkboxEl.addEventListener('change', ()=> {
+    item.complete = checkboxEl.checked;
+    if(item.complete) {
+      itemEl.classList.add('complete');
+    } else {
+      itemEl.classList.remove('complete');
+    }
+  })
+
+  inputEl.addEventListener('blur', () => {
+    inputEl.setAttribute('disabled', '');
+  })
+  
+  editBtnEl.addEventListener('click', () => {
+    inputEl.removeAttribute('disabled');
+    inputEl.focus();
+  })
+
+  removeBtnEl.addEventListener('click', ()=> {
+    todos.filter(t => t.id !== item.id)
+  })
+
   actionsEl.append(editBtnEl);
   actionsEl.append(removeBtnEl);
 
