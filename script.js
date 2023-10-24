@@ -19,8 +19,12 @@ function createNewToDo () {
 
  //요소 생성하기
  const {itemEl, inputEl, editBtnEl, removeBtnEl} = createToDoElement(item)
-
- list.prepend(itemEl)
+//리스트 요소 안에 방금 생성한 아이템 요소 추가
+ list.prepend(itemEl);
+//disabled를 없애서 바로 타이핑이 가능하게 수정
+ inputEl.removeAttribute('disabled');
+ //만들자마자 타이핑 가능하게 수정
+ inputEl.focus();
 }
 
 function createToDoElement(item) {
