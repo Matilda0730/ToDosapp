@@ -25,6 +25,7 @@ function createNewToDo () {
  inputEl.removeAttribute('disabled');
  //만들자마자 타이핑 가능하게 수정
  inputEl.focus();
+ saveToLocalStorage();
 }
 
 function createToDoElement(item) {
@@ -33,6 +34,7 @@ function createToDoElement(item) {
 
   const checkboxEl = document.createElement('input')
   checkboxEl.type = 'checkbox';
+  checkboxEl.checked = item.complete;
 
   if(item.complete) {
     itemEl.classList.add('complete');
@@ -65,10 +67,12 @@ function createToDoElement(item) {
     } else {
       itemEl.classList.remove('complete');
     }
+    saveToLocalStorage();
   })
 
   inputEl.addEventListener('blur', () => {
     inputEl.setAttribute('disabled', '');
+    saveToLocalStorage();
   })
   
   editBtnEl.addEventListener('click', () => {
@@ -77,8 +81,12 @@ function createToDoElement(item) {
   })
 
   removeBtnEl.addEventListener('click', ()=> {
-    todos.filter(t => t.id !== item.id)
+    todos = todos.filter(t => t.id !== item.id)
+    itemEl.remove();
+    saveToLocalStorage();
   })
+
+  //클릭한 요소의 id와 다른 것만 배열로 새롭게 반환하는 것.
 
   actionsEl.append(editBtnEl);
   actionsEl.append(removeBtnEl);
@@ -89,3 +97,30 @@ function createToDoElement(item) {
 
   return {itemEl, inputEl, editBtnEl, removeBtnEl} //객체니까 {}를 쓰는 것
 }
+
+function saveToLocalStorage() {
+  const data = JSON.stringify(todos);
+  localStorage.setItem('my_todos',data);
+}
+
+function loadFromLocalStorage() {
+  const data = localStorage.getItem('my_todos');
+
+  if(data) {
+    todos = JSON.parse(data);
+  }
+}
+
+function displayTodos() {
+  loadFromLocalStorage()
+
+    for (let i = 0 ; i< todos.length ; i++) {
+      const item = todos[i]
+        const {itemEl} = createToDoElement(item); 
+        
+        list.append(itemEl);
+    }
+}
+
+displayTodos();
+
